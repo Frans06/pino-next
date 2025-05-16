@@ -1,6 +1,6 @@
 # pino-next
 
-A powerful and flexible logging solution for Next.js applications using Pino under the hood.
+A opinionated, powerful and flexible logging solution for Next.js applications using Pino under the hood.
 
 ## Features
 

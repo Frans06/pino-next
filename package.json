@@ -20,16 +20,16 @@
     "typescript",
     "logging"
   ],
-  "author": "Your Name",
+  "author": "frans627",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/yourusername/nextjs-pino-logger.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/nextjs-pino-logger/issues"
+    "url": "https://github.com/Frans06/pino-next/issues"
   },
-  "homepage": "https://github.com/yourusername/nextjs-pino-logger#readme",
+  "homepage": "https://github.com/Frans06/pino-next#README",
   "dependencies": {
     "pino": "^9.6.0",
     "pino-pretty": "^10.0.0"
