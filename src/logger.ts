@@ -121,38 +121,40 @@ export function patchConsoleWithLogger(
   }
 }
 
-export function processLogArgs(
-  args: unknown[],
-): (object | string | undefined)[] {
+export function processLogArgs(args: unknown[]): (object | string)[] | null {
   const mergingObject: Record<string, unknown> = {};
   const messageParts: string[] = [];
 
   for (const arg of args) {
     if (arg instanceof Error) {
-      // Handle Error objects appropriately
+      // Handle Error objects
       Object.assign(mergingObject, {
         err: arg,
         stack: arg.stack,
         message: arg.message,
       });
     } else if (Boolean(arg) && typeof arg === "object") {
-      // Handle object arguments
+      // Handle object args
       Object.assign(mergingObject, arg);
     } else {
-      // Handle primitive arguments
+      // Handle primitive args
       messageParts.push(String(arg));
     }
   }
 
-  // Concatenate non-object arguments into a single string message
+  // Concatenate non-object args and stringify them into a single string message
   const message = messageParts.length > 0 ? format(...messageParts) : undefined;
-  if (Object.keys(mergingObject).length)
-    return [mergingObject, message ? message : undefined];
-  else return [message];
+
+  return Object.keys(mergingObject).length
+    ? message
+      ? [mergingObject, message]
+      : [mergingObject]
+    : message
+      ? [message]
+      : null;
 }
 
 const instrumentationOptions = {
-  // https://getpino.io/#/docs/api?id=logmethod
   logMethod(args: Parameters<LogFn>, method: LogFn) {
     // Early returns for optimization
     if (args.length === 0) {
@@ -162,11 +164,8 @@ const instrumentationOptions = {
       return method.apply(this, args);
     }
 
-    // If the arguments can't be changed to match Pino's signature, collapse them into a single merging object.
-    const res = processLogArgs(args);
-    // Concatenate non-object arguments into a single string message.
-    // @ts-ignore: this is an overload typing error
-    return method.apply(this, [...res]);
+    const mergedArgs = processLogArgs(args) as Parameters<LogFn>;
+    return method.apply(this, mergedArgs ? [...mergedArgs] : [""]);
   },
 };
 
