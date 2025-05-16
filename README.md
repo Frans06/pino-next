@@ -21,27 +21,15 @@ yarn add pino-next
 pnpm add pino-next
 ```
 
-Patch global
+Patch global on instrumentation.ts file on the project root
 
-```instrumentation.js
+```typescript
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const patcher = await import("pino-next");
     patcher.patchConsoleWithLogger("console", console, patcher.consoleToPino);
-
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-export const onRequestError = Sentry.captureRequestError;
-```
-
-```
-
-```
-
-```instrumentation
-
 ```
 
 ## Basic Usage
