@@ -32,16 +32,18 @@ describe("logger", () => {
     it("should process error objects", () => {
       const error = new Error("Test error");
       const result = processLogArgs([error]);
-      expect(result[0]).toHaveProperty("err", error);
-      expect(result[0]).toHaveProperty("stack", error.stack);
-      expect(result[0]).toHaveProperty("message", "Test error");
+      expect(result).not.toBeNull();
+      expect(result?.[0]).toHaveProperty("err", error);
+      expect(result?.[0]).toHaveProperty("stack", error.stack);
+      expect(result?.[0]).toHaveProperty("message", "Test error");
     });
 
     it("should process mixed arguments", () => {
       const obj = { userId: 123 };
       const result = processLogArgs([obj, "User %s logged in", "John"]);
-      expect(result[0]).toEqual(obj);
-      expect(result[1]).toBe("User John logged in");
+      expect(result).not.toBeNull();
+      expect(result?.[0]).toEqual(obj);
+      expect(result?.[1]).toBe("User John logged in");
     });
   });
 });
