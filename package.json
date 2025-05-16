@@ -1,6 +1,6 @@
 {
   "name": "pino-next",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A powerful oppinionated logger for Next.js applications using Pino",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
