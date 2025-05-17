@@ -17,7 +17,7 @@ import {
   consoleToPino,
 } from "./methodsMaps";
 
-interface LoggerConfig {
+export interface LoggerConfig {
   level?: string;
   isProduction?: boolean;
   prettify?: boolean;
