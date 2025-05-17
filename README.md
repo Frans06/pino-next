@@ -30,7 +30,7 @@ Patch global on instrumentation.ts file on the project root
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const patcher = await import("pino-next");
-    patcher.patchAllConsoleLogger("console", console, patcher.consoleToPino);
+    patcher.patchAllConsoleLogger({ forceArgs: true });
   }
 }
 ```
@@ -41,7 +41,7 @@ export async function register() {
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const patcher = await import("pino-next");
-    patcher.patchAllConsoleLogger("console", console, patcher.consoleToPino);
+    patcher.patchAllConsoleLogger(forceArgs: true);
   }
 }
 ```
