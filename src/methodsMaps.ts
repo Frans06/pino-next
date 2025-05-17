@@ -1,7 +1,6 @@
-export type AdapterType<T extends readonly string[]> = Record<
-  string,
-  T[number]
->;
+export type AdapterType<T extends readonly string[]> = Partial<
+  Record<string, T[number]>
+> & { default: T[number] };
 
 export const PinoMethodNames = [
   "fatal",
@@ -28,6 +27,7 @@ export const pinoToConsole: AdapterType<typeof ConsoleMethodNames> = {
   info: "log",
   debug: "debug",
   trace: "trace",
+  default: "log",
 };
 
 export const consoleToPino: AdapterType<typeof PinoMethodNames> = {
@@ -37,6 +37,14 @@ export const consoleToPino: AdapterType<typeof PinoMethodNames> = {
   info: "info",
   debug: "debug",
   trace: "trace",
+  default: "info",
+};
+
+export const nextToPino: AdapterType<typeof PinoMethodNames> = {
+  default: "info",
+  error: "error",
+  trace: "trace",
+  warn: "warn",
 };
 
 /**
@@ -45,9 +53,12 @@ export const consoleToPino: AdapterType<typeof PinoMethodNames> = {
  * @param method The method name to map
  * @returns The mapped method name
  */
-export function getMappedMethod<T extends readonly string[]>(
+export const getMappedMethod = <T extends readonly string[]>(
   adapter: AdapterType<T>,
   method: string,
-): T[number] {
-  return (adapter[method] || method) as T[number];
-}
+): T[number] => {
+  if (method in adapter) {
+    return adapter[method] ?? adapter["default"];
+  }
+  return adapter["default"];
+};

@@ -21,18 +21,15 @@ interface LoggerConfig {
   level?: string;
   isProduction?: boolean;
   prettify?: boolean;
+  forceArgs?: boolean;
 }
 
 /**
  * Creates a logger instance with optional instrumentation
  * @param config Configuration options for the logger
- * @param isInstrumented Whether to add instrumentation hooks
  * @returns A configured pino logger instance
  */
-export function createLogger(
-  config: LoggerConfig = {},
-  isInstrumented = false,
-): Logger {
+export function createLogger(config: LoggerConfig = {}): Logger {
   try {
     const isProduction =
       config.isProduction ?? process.env.NODE_ENV === "production";
@@ -57,7 +54,7 @@ export function createLogger(
       },
     };
 
-    if (isInstrumented) {
+    if (config?.forceArgs) {
       loggerOptions.hooks = instrumentationOptions;
     }
 
@@ -101,13 +98,14 @@ function createConsoleLoggerFallback<CustomLevels extends string = never>(
   return fallbackLogger;
 }
 
-export function patchConsoleWithLogger(
+export function patchWithLogger(
   childName: string,
-  patched: Console = console,
   mapper: AdapterType<typeof PinoMethodNames> = consoleToPino,
+  patched: Console = console,
+  loggerConfig?: LoggerConfig,
 ): void {
   for (const method of ConsoleMethodNames) {
-    const newLogger = createLogger({}, true);
+    const newLogger = createLogger(loggerConfig);
     const childLogger = newLogger.child({ name: childName });
     const newMethod = getMappedMethod(mapper, method);
     const patchedLogFn = childLogger[newMethod];

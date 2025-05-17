@@ -1,6 +1,7 @@
 # pino-next
 
 A opinionated, powerful and flexible logging solution for Next.js applications using Pino under the hood.
+Highly inspired by [next-logger](https://github.com/sainsburys-tech/next-logger)
 
 ## Features
 
@@ -23,11 +24,40 @@ pnpm add pino-next
 
 Patch global on instrumentation.ts file on the project root
 
+- Global patcher:
+
 ```typescript
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     const patcher = await import("pino-next");
-    patcher.patchConsoleWithLogger("console", console, patcher.consoleToPino);
+    patcher.patchAllConsoleLogger("console", console, patcher.consoleToPino);
+  }
+}
+```
+
+- Next Only patcher:
+
+```typescript
+export async function register() {
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    const patcher = await import("pino-next");
+    patcher.patchAllConsoleLogger("console", console, patcher.consoleToPino);
+  }
+}
+```
+
+- Custom logger patcher:
+
+```typescript
+export async function register() {
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    const patcher = await import("pino-next");
+    patcher.patchWithLogger(
+      "customLoggerName",
+      customeAdapter,
+      customLogger,
+      loggerOptions,
+    );
   }
 }
 ```
