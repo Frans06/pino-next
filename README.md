@@ -136,7 +136,7 @@ export default function App({ Component, pageProps }) {
 
 ## API Reference
 
-### createLogger(config?, isInstrumented?)
+### createLogger(config?)
 
 Creates a new logger instance.
 
@@ -144,19 +144,25 @@ Creates a new logger instance.
   - `level` - Log level (default: 'info' in development, 'warn' in production)
   - `isProduction` - Force production mode
   - `prettify` - Enable pretty printing
+  - `forceArgs` - Add hook args
 - `isInstrumented` - Whether to add instrumentation hooks (default: false)
 
-### patchConsoleWithLogger(childName, patched?, mapper?)
+### patchWithLogger(childName, mapper, patched?, config?)
 
 Patches a console object with logger methods.
 
 - `childName` - Name for the child logger
 - `patched` - Console object to patch (default: global console)
 - `mapper` - Method mapping (default: consoleToPino)
+- `config` - Same as create logger
 
 ### logger
 
 A pre-configured default logger instance.
+
+### Development
+
+Please let me know if you have any requirement or issues. PRs are also welcome.
 
 ## License
 
